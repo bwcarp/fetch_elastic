@@ -32,7 +32,7 @@ Host format: http://host1:9200
         Warning number of hits
 ```
 
-The command itself is straightforward. Writing the json config for your searches will require an understanding of Elastic beyond just Kibana's query language. I recommend reading their documentation at https://www.elastic.co/guide/en/elasticsearch/reference/current/search.html
+The command itself is straightforward. Writing the json config for your searches will require an understanding of Elastic beyond just Kibana's query language. I recommend reading their documentation at https://www.elastic.co/guide/en/elasticsearch/reference/current/full-text-queries.html
 
 Here is an example. This query will look for hosts starting with "database" in the name, and check for errors that include postgresql's default port.
 
