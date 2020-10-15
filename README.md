@@ -74,7 +74,7 @@ Here is an example. This query will look for hosts starting with "database" in t
 In this case, I might want to watch for persisting errors but warn right away. Here's an example of how this would run warning the first time and going critical if it sees 5.
 
 ```
-/usr/lib/nagios/plugins/fetch_elastic -i my_index -j /opt/elastic_queries/example.json -w 1 -c 5
+/usr/lib/nagios/plugins/fetch_elastic -i my_index -j /opt/elastic_queries/example.json -w 1 -c 5 http://myelasticserver:9200
 ```
 
 ### Counter vs current
@@ -83,10 +83,10 @@ This check can continue to count across checks and increment from the last check
 
 ```
 /usr/lib/nagios/plugins/fetch_elastic -i my_index -j /opt/elastic_queries/example.json -w 1 -c 5
--cf /var/run/icinga2/cmd/mycounter.bin
+-cf /var/run/icinga2/cmd/mycounter.bin http://myelasticserver:9200
 ```
 
-This command can also be used as an event handler when the `-e` flag is specified. In this case, if you *process check result* to *OK* status, the plugin will remove the counter file for you. This will save you the trouble of logging into the montioring server to remove it by hand. Example usage:
+This command can also be used as an event handler when the `-e` flag is specified. In this case, if you **process check result** to **OK** status, the plugin will remove the counter file for you. This will save you the trouble of logging into the montioring server to remove it by hand. Example usage:
 
 ```
 /usr/lib/nagios/plugins/fetch_elastic -e -cf /var/run/icinga2/cmd/mycounter.bin
