@@ -89,5 +89,5 @@ This check can continue to count across checks and increment from the last check
 This command can also be used as an event handler when the `-e` flag is specified. In this case, if you **process check result** to **OK** status, the plugin will remove the counter file for you. This will save you the trouble of logging into the montioring server to remove it by hand. Example usage:
 
 ```
-/usr/lib/nagios/plugins/fetch_elastic -e -cf /var/run/icinga2/cmd/mycounter.bin
+/usr/lib/nagios/plugins/fetch_elastic -e -s 0 -cf /var/run/icinga2/cmd/mycounter.bin
 ```
