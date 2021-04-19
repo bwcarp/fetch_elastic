@@ -1,1 +1,1 @@
-require github.com/elastic/go-elasticsearch/v7 v7.x
+require github.com/elastic/go-elasticsearch/v7 7.x
