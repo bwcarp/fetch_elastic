@@ -74,7 +74,7 @@ Here is an example. This query will look for hosts starting with "database" in t
 In this case, I might want to watch for persisting errors but warn right away. Here's an example of how this would run warning the first time and going critical if it sees 5.
 
 ```
-/usr/lib/nagios/plugins/fetch_elastic -i my_index -j /opt/elastic_queries/example.json -w 1 -c 5 http://myelasticserver:9200
+/usr/lib/nagios/plugins/fetch_elastic -i my_index -q /opt/elastic_queries/example.json -w 1 -c 5 http://myelasticserver:9200
 ```
 
 ### Counter vs gauge
@@ -82,7 +82,7 @@ In this case, I might want to watch for persisting errors but warn right away. H
 This check can continue to count across checks and increment from the last check. It stores the count in a file and adds to it on the next run. Removing the counter file will reset. An example of this:
 
 ```
-/usr/lib/nagios/plugins/fetch_elastic -i my_index -j /opt/elastic_queries/example.json -w 1 -c 5
+/usr/lib/nagios/plugins/fetch_elastic -i my_index -q /opt/elastic_queries/example.json -w 1 -c 5
 -cf /var/run/icinga2/cmd/mycounter.bin http://myelasticserver:9200
 ```
 
