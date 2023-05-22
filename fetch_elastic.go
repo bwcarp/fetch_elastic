@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"strings"
 
 	elasticsearch "github.com/elastic/go-elasticsearch/v7"
 )
@@ -46,7 +47,7 @@ func main() {
 	var hosts = flag.Args()
 
 	// Purge counter file and quit if running as an event
-	if *event == true && *currentStatus == 0 {
+	if *event && *currentStatus == 0 {
 		os.Remove(*counterFile)
 		os.Exit(0)
 	}
@@ -80,12 +81,19 @@ func main() {
 	}
 
 	// Load JSON query
-	payload, err := os.Open(*jsonFile)
+	// payload, err := os.Open(*jsonFile)
+	fileContent, err := ioutil.ReadFile(*jsonFile)
 	if err != nil {
 		fmt.Println("UNKNOWN: Could not open query file.")
 		fmt.Print(err)
 		os.Exit(3)
 	}
+
+  // Get json file content and expand env variables
+	text := string(fileContent)
+	textExp := os.ExpandEnv(text)
+	// fmt.Println(textExp)
+	payload := strings.NewReader(textExp)
 
 	// Execute search
 	res, err := es.Search(
@@ -122,12 +130,21 @@ func main() {
 				os.Exit(3)
 			}
 			readbuf := bytes.NewReader(content)
-			binary.Read(readbuf, binary.LittleEndian, &priorHits)
+			err = binary.Read(readbuf, binary.LittleEndian, &priorHits)
+			if err != nil {
+				fmt.Print(err)
+			}
 			hits += priorHits
 		}
 		writebuf := new(bytes.Buffer)
-		binary.Write(writebuf, binary.LittleEndian, hits)
-		ioutil.WriteFile(*counterFile, writebuf.Bytes(), 0644)
+		err = binary.Write(writebuf, binary.LittleEndian, hits)
+		if err != nil {
+			fmt.Print(err)
+		}
+		err = ioutil.WriteFile(*counterFile, writebuf.Bytes(), 0644)
+		if err != nil {
+			fmt.Print(err)
+		}
 	}
 
 	// Evaluate and alert
